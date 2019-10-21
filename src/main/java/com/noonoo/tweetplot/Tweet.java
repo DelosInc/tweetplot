@@ -1,7 +1,8 @@
 package com.noonoo.tweetplot;
 
 public class Tweet implements java.io.Serializable {
-    private static final long SerialVersionUID = 1L;
+    
+    private static final long serialVersionUID = 1L;
     private long id;
     private String text;
 
