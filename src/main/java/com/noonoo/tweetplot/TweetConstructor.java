@@ -10,8 +10,9 @@ public class TweetConstructor implements Function<Status, Tweet> {
 
     @Override
     public Tweet call(Status v1) throws Exception {
+        
         Tweet tweet = new Tweet();
-        tweet.setData(v1.getId(), v1.getText());
+        tweet.setData(v1.getId(), v1.getText(), new java.sql.Date(v1.getCreatedAt().getTime()), v1.getUser().getId());
         return tweet;
     }
 };

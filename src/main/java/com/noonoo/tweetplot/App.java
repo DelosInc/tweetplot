@@ -16,6 +16,7 @@ public final class App {
     public static void main(String[] args) throws Exception {
 
         if (!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
+            
             Logger.getRootLogger().setLevel(Level.WARN);
         }
 
@@ -24,10 +25,10 @@ public final class App {
         System.setProperty("twitter4j.oauth.accessToken", "-");
         System.setProperty("twitter4j.oauth.accessTokenSecret", "");
 
-        SparkConf sparkConf = new SparkConf().setAppName("tweeetplot");
+        SparkConf sparkConf = new SparkConf().setAppName("tweetplot");
 
         JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(2000));
-        String[] filters = {"Machine Learning"};
+        String[] filters = {"Cat"};
         JavaReceiverInputDStream<Status> stream = TwitterUtils.createStream(jssc, filters);
 
         JavaDStream<Status> tweets = stream.flatMap(new TweetParser());     //TweetParser returns Iterator<Status>
@@ -35,8 +36,9 @@ public final class App {
         tweets.print();
 
         tweets.foreachRDD(new Dumper(sparkConf));
+        tweets.print();
 
         jssc.start();
         jssc.awaitTermination();
     }
-};
+}
