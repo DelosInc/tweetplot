@@ -24,7 +24,6 @@ public final class App {
         System.setProperty("twitter4j.oauth.consumerSecret", "");
         System.setProperty("twitter4j.oauth.accessToken", "-");
         System.setProperty("twitter4j.oauth.accessTokenSecret", "");
-
         SparkConf sparkConf = new SparkConf().setAppName("tweetplot");
 
         JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(2000));

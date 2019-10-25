@@ -1,10 +1,13 @@
 package com.noonoo.tweetplot;
 
+import java.util.Properties;
+
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 
 import twitter4j.Status;
@@ -40,5 +43,17 @@ public class Dumper implements VoidFunction<JavaRDD<Status>> {
         hashtagsDataFrame.show();
         hashtagTweetsDataFrame.show();
         urlsDataFrame.show();
+
+        Properties properties = new Properties();
+        properties.put("user", "root");
+        properties.put("password", "rootpassword");
+        Class.forName("org.mariadb.jdbc.Driver");
+
+        tweetsDataFrame.write().mode(SaveMode.Append).jdbc("jdbc:mysql://localhost/tweetsink", "tweetsink.Tweets", properties);
+        profilesDataFrame.write().mode(SaveMode.Append).jdbc("jdbc:mysql://localhost/tweetsink", "tweetsink.Profiles", properties);
+        hashtagsDataFrame.write().mode(SaveMode.Append).jdbc("jdbc:mysql://localhost/tweetsink", "tweetsink.Hastags", properties);
+        hashtagTweetsDataFrame.write().mode(SaveMode.Append).jdbc("jdbc:mysql://localhost/tweetsink", "tweetsink.HashtagsLookup", properties);
+        urlsDataFrame.write().mode(SaveMode.Append).jdbc("jdbc:mysql://localhost/tweetsink", "tweetsink.Urls", properties);
+
     }
 }
